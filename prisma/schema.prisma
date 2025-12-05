@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("postgres://18a563393187217d2de544d40285be2a9f020dbc942c5c5e230e76f33fd2abae:sk_AzXc66yyW9JOXroE2cr93@db.prisma.io:5432/postgres?sslmode=require")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  privyId      String    @unique
+  email        String?
+  name         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  blogs        Blog[]
+}
+
+model Blog {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
